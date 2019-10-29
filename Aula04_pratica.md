@@ -99,6 +99,8 @@ CAGGCACAGCCAAGAGGGCTGAAGAAATGGTAGAACGGAGCAGCTGGTGATGTGTGGGCCCACCGGCCCCAGGCTCCTGT
 
 ### PASSO 5: MAPEAMENTO
 
+![Map_reads](
+
 Para o correto maepamento, é preciso atribuir corretamente os nomes dos reads, ou "read groups".
 >__Por que atribuir corretamente os read groups (RG)?__  
 >Para diferenciar não apenas amostras, mas também características técnicas de artefatos. Com essas informações em mãos, podemos mitigar os efeitos desses artefatos durante as etapas de marcação de reads duplicados (PASSO X) e BQSR (PASSO XX).[RG_required_by_GATK](https://software.broadinstitute.org/gatk/documentation/article?id=6472)  
@@ -152,15 +154,16 @@ aluno30@5b6864eb3f67:~/preprocessing/alignment_metrics$ mkdir tmp_dir #repositó
 ```  
 Para executar o CollectAlignmentSummaryMetrics, siga a linha de comando para cada amostra:
 ```bash   
-aluno30@5b6864eb3f67:~/preprocessing/alignment_metrics$ java -Xmx8G -jar /home/tools/manual/picard-2.18.14/picard.jar CollectAlignmentSummaryMetrics R=../hg38/hg38.fa I=TCGA-BH-A1F0-01A_BRCA_sorted.bam O=metrics_TCGA-BH-A1F0-01A_BRCA.txt TMP_DIR=tmp_dir 2> TCGA-BH-A1F0-01A_BRCA_CollectAlignmentSummaryMetrics.log &
+aluno30@5b6864eb3f67:~/preprocessing/alignment_metrics$ java -Xmx8G -jar /usr/local/bin/picard.jar CollectAlignmentSummaryMetrics R=../hg38/hg38.fa I=TCGA-BH-A1F0-01A_BRCA_sorted.bam O=metrics_TCGA-BH-A1F0-01A_BRCA.txt TMP_DIR=tmp_dir 2> TCGA-BH-A1F0-01A_BRCA_CollectAlignmentSummaryMetrics.log &
 ```  
 
 ```bash   
-aluno30@5b6864eb3f67:~/preprocessing/alignment_metrics$ java -Xmx8G -jar /home/tools/manual/picard-2.18.14/picard.jar CollectAlignmentSummaryMetrics R=../hg38/hg38.fa I=TCGA-BH-A1F0-11B_BRCA_sorted.bam O=metrics_TCGA-BH-A1F0-11B_BRCA.txt TMP_DIR=tmp_dir 2> TCGA-BH-A1F0-11B_BRCA_CollectAlignmentSummaryMetrics.log &
+aluno30@5b6864eb3f67:~/preprocessing/alignment_metrics$ java -Xmx8G -jar /usr/local/bin/picard.jar CollectAlignmentSummaryMetrics R=../hg38/hg38.fa I=TCGA-BH-A1F0-11B_BRCA_sorted.bam O=metrics_TCGA-BH-A1F0-11B_BRCA.txt TMP_DIR=tmp_dir 2> TCGA-BH-A1F0-11B_BRCA_CollectAlignmentSummaryMetrics.log &
 ```
 
 O resultado será salvo nos arquivos de métricas de alinhamento. 
 Explore com o comando ```less -S metrics_TCGA-BH-A1F0-11B_BRCA.txt```  
 
+### PASSO 7: MARCAÇÃO DE READS DUPLICADOS
 
 
