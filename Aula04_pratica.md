@@ -8,7 +8,7 @@ Envolve o pré-processamento dos dados brutos da sequência (geralmente obtidos 
 
 Etapas abordadas neste tutorial de aula prática:
 
-![preprocessing]()
+![preprocessing](https://github.com/cmasotti/BioinfoInstrumental-Aula04/blob/master/bestPractices_preprocessing_smaller.jpg)
 
 
 ```bash  
