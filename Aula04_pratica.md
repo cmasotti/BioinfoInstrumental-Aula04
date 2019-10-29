@@ -103,24 +103,23 @@ Para o correto maepamento, é preciso atribuir corretamente os nomes dos reads, 
 >__Por que atribuir corretamente os read groups (RG)?__  
 >Para diferenciar não apenas amostras, mas também características técnicas de artefatos. Com essas informações em mãos, podemos mitigar os efeitos desses artefatos durante as etapas de marcação de reads duplicados (PASSO X) e BQSR (PASSO XX).[RG_required_by_GATK](https://software.broadinstitute.org/gatk/documentation/article?id=6472)  
 
-Buscamos as informações das amostras aqui analisadas no repositório de dados do TCGA:
-BREAST CANCER SAMPLE (TCGA-BH-A1F0)
- - **WXS primary tumor** [TCGA-BH-A1F0-01A-11D-A135-09](https://portal.gdc.cancer.gov/files/68ada300-f0a2-447a-aa47-865770a80125)
- - **WXS adjacent normal tissue** [TCGA-BH-A1F0-01A-11D-A135-09](https://portal.gdc.cancer.gov/files/68ada300-f0a2-447a-aa47-865770a80125)
+Buscamos as informações das amostras aqui analisadas no repositório de dados do TCGA:  
 
-![info @RG]()
+>BREAST CANCER SAMPLE (TCGA-BH-A1F0)  
+> - **WXS primary tumor** [TCGA-BH-A1F0-01A-11D-A135-09](https://portal.gdc.cancer.gov/files/68ada300-f0a2-447a-aa47-865770a80125)  
+>  - **WXS adjacent normal tissue** [TCGA-BH-A1F0-01A-11D-A135-09](https://portal.gdc.cancer.gov/files/68ada300-f0a2-447a-aa47-865770a80125)  
 
+![info @RG](https://github.com/cmasotti/BioinfoInstrumental-Aula04/blob/master/RG.png)  
 
-
+**Executar a linha de comando a seguir (piped command line) para as duas amostras TCGA:**   
+>TCGA-BH-A1F0-01A (WXS primary tumor)
 ```bash   
-aluno30@5b6864eb3f67:~/preprocessing/mapping$ 
-
-
-
-
-
-
-![preprocessing]()  
+aluno30@5b6864eb3f67:~/preprocessing/mapping$ bwa mem -M -t4 -R '@RG\tID:74ed7812-25ef-40ff-aca8-dea5ccb39851\tSM:TCGA-BH-A1F0-01A\tPL:ILLUMINA\t' ../hg38/hg38.fa TCGA-BH-A1F0-01A_BRCA_R1.fastq TCGA-BH-A1F0-01A_BRCA_R2.fastq | samtools view -@4 -Sb - -O BAM -o TCGA-BH-A1F0-01A_BRCA.bam   
+```  
+>TCGA-BH-A1F0-11B (WXS normal tissue)
+```bash   
+aluno30@5b6864eb3f67:~/preprocessing/mapping$ bwa membwa mem -M -t4 -R '@RG\tID:3ac135b5-f024-4534-a513-7adb9f04cc00\tSM:TCGA-BH-A1F0-11B\tPL:ILLUMINA\t' ../hg38/hg38.fa TCGA-BH-A1F0-11B_BRCA_R1.fastq TCGA-BH-A1F0-11B_BRCA_R2.fastq | samtools view -@4 -Sb - -O BAM -o TCGA-BH-A1F0-11B_BRCA.bam   
+```   
 
 
 
