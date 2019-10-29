@@ -135,6 +135,32 @@ aluno30@5b6864eb3f67:~/preprocessing/mapping$ samtools index -@2 TCGA-BH-A1F0-01
 aluno30@5b6864eb3f67:~/preprocessing/mapping$ samtools index -@2 TCGA-BH-A1F0-11B_BRCA_sorted.bam  
 ```   
 
+Confira o cabeçalho dos .bam com a linha de comando:
+```bash   
+```
+
 ### PASSO 6: ANÁLISE DA QUALIDADE DO MAPEAMENTO  
-Para avaliar a qualidade do mapeamento dos reads, executamos um script do pacote de ferramentas Picard
+Para avaliar a qualidade do mapeamento dos reads, executamos um script (em liguagem Java) do pacote de ferramentas Picard, o [CollectAlignmentSummaryMetrics](https://software.broadinstitute.org/gatk/documentation/tooldocs/current/picard_analysis_CollectAlignmentSummaryMetrics.php)
+
+Para tanto, vá ao diretório /alignment_metrics e crie links simbólicos para os .bams mapeados, ordenados e indexados.
+```bash   
+aluno30@5b6864eb3f67:~/preprocessing/alignment_metrics$ cd ../alignment_metrics
+aluno30@5b6864eb3f67:~/preprocessing/alignment_metrics$ ln -s ../mapping/*_sorted.bam . 
+aluno30@5b6864eb3f67:~/preprocessing/alignment_metrics$ ln -s ../mapping/*_sorted.bam.bai .  
+aluno30@5b6864eb3f67:~/preprocessing/alignment_metrics$ ls #confira os arquivos salvos
+aluno30@5b6864eb3f67:~/preprocessing/alignment_metrics$ mkdir tmp_dir #repositório de arquivos temporários
+```  
+Para executar o CollectAlignmentSummaryMetrics, siga a linha de comando para cada amostra:
+```bash   
+aluno30@5b6864eb3f67:~/preprocessing/alignment_metrics$ java -Xmx8G -jar /home/tools/manual/picard-2.18.14/picard.jar CollectAlignmentSummaryMetrics R=../hg38/hg38.fa I=TCGA-BH-A1F0-01A_BRCA_sorted.bam O=metrics_TCGA-BH-A1F0-01A_BRCA.txt TMP_DIR=tmp_dir 2> TCGA-BH-A1F0-01A_BRCA_CollectAlignmentSummaryMetrics.log &
+```  
+
+```bash   
+aluno30@5b6864eb3f67:~/preprocessing/alignment_metrics$ java -Xmx8G -jar /home/tools/manual/picard-2.18.14/picard.jar CollectAlignmentSummaryMetrics R=../hg38/hg38.fa I=TCGA-BH-A1F0-11B_BRCA_sorted.bam O=metrics_TCGA-BH-A1F0-11B_BRCA.txt TMP_DIR=tmp_dir 2> TCGA-BH-A1F0-11B_BRCA_CollectAlignmentSummaryMetrics.log &
+```
+
+O resultado será salvo nos arquivos de métricas de alinhamento. 
+Explore com o comando ```less -S metrics_TCGA-BH-A1F0-11B_BRCA.txt```  
+
+
 
