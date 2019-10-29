@@ -99,7 +99,7 @@ CAGGCACAGCCAAGAGGGCTGAAGAAATGGTAGAACGGAGCAGCTGGTGATGTGTGGGCCCACCGGCCCCAGGCTCCTGT
 
 ### PASSO 5: MAPEAMENTO
 
-![Map_reads](https://github.com/cmasotti/BioinfoInstrumental-Aula04/blob/master/bestPractices_preprocessing_Map.jpg)  
+![Map_reads](images/bestPractices_preprocessing_Map.jpg)  
 
 Para o correto maepamento, é preciso atribuir corretamente os nomes dos reads, ou "read groups".
 >__Por que atribuir corretamente os read groups (RG)?__  
@@ -111,7 +111,7 @@ Buscamos as informações das amostras aqui analisadas no repositório de dados 
 > - **WXS primary tumor** [TCGA-BH-A1F0-01A-11D-A135-09](https://portal.gdc.cancer.gov/files/68ada300-f0a2-447a-aa47-865770a80125)  
 >  - **WXS adjacent normal tissue** [TCGA-BH-A1F0-01A-11D-A135-09](https://portal.gdc.cancer.gov/files/68ada300-f0a2-447a-aa47-865770a80125)  
 
-![info @RG](https://github.com/cmasotti/BioinfoInstrumental-Aula04/blob/master/RG.png)  
+![info @RG](images/RG.png)  
 
 **Executar a linha de comando a seguir (piped command line) para as duas amostras TCGA:**   
 >TCGA-BH-A1F0-01A (WXS primary tumor)
@@ -167,7 +167,7 @@ Observe o significado dos escores com base no link [CollectAlignmentSummaryMetri
 
 
 ### PASSO 7: MARCAÇÃO DE READS DUPLICADOS
-![mark_duplicates](https://github.com/cmasotti/BioinfoInstrumental-Aula04/blob/master/bestPractices_preprocessing_dedup.jpg) 
+![mark_duplicates](images/bestPractices_preprocessing_dedup.jpg) 
 
 Nesta etapa, marcamos os reads duplicados com a ferramenta MarkDuplicates (Picard), que localiza e identifica reads duplicadas em um arquivo BAM ou SAM.   
  > Reads duplicados se originam de um único fragmento de DNA.   
@@ -191,7 +191,7 @@ O script também gera um arquivo de métricas, confira em [MarDuplicates](https:
 Explore com ```less -S TCGA-BH-A1F0-01A_BRCA_dup.metrics``` a proporção de reads duplicados, por exemplo.
 
 ### PASSO 8: BQSR (Base Quality Score Recalibration)
-![BQSR](https://github.com/cmasotti/BioinfoInstrumental-Aula04/blob/master/bestPractices_preprocessing_BQSR.jpg)
+![BQSR](images/bestPractices_preprocessing_BQSR.jpg)
 
 >Este passo detecta os erros sistemáticos cometidos pelo seqüenciador quando estima o escore de qualidade de cada base detectada.
 >O **BQSR** aplica o aprendizado de máquina para modelar empiricamente esses erros e ajustar os escores de qualidade.
