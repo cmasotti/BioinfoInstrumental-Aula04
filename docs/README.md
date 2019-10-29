@@ -16,7 +16,7 @@ Utilizaremos como referência para a aula as boas práticas de pré-processament
 
 **Fluxograma de trabalho desta aula prática:**  
 
-![preprocessing](https://github.com/cmasotti/BioinfoInstrumental-Aula04/blob/master/bestPractices_preprocessing_smaller.jpg)
+![preprocessing](images/bestPractices_preprocessing_smaller.jpg)
 
 
 A seguir, executaremos o passo-a-passo do pré-processamento dos dados:
