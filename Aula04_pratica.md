@@ -103,7 +103,7 @@ CAGGCACAGCCAAGAGGGCTGAAGAAATGGTAGAACGGAGCAGCTGGTGATGTGTGGGCCCACCGGCCCCAGGCTCCTGT
 
 Para o correto maepamento, é preciso atribuir corretamente os nomes dos reads, ou "read groups".
 >__Por que atribuir corretamente os read groups (RG)?__  
->Para diferenciar não apenas amostras, mas também características técnicas de artefatos. Com essas informações em mãos, podemos mitigar os efeitos desses artefatos durante as etapas de marcação de reads duplicados (PASSO X) e BQSR (PASSO XX).[RG_required_by_GATK](https://software.broadinstitute.org/gatk/documentation/article?id=6472)  
+>Para diferenciar não apenas amostras, mas também características técnicas de artefatos. Com essas informações em mãos, podemos mitigar os efeitos desses artefatos durante as etapas de marcação de reads duplicados (PASSO 7) e BQSR (PASSO 8).[RG_required_by_GATK](https://software.broadinstitute.org/gatk/documentation/article?id=6472)  
 
 Buscamos as informações das amostras aqui analisadas no repositório de dados do TCGA:  
 
@@ -216,7 +216,7 @@ Execute a linha de comando a seguir para as duas amostras TCGA:
 ```bash   
 aluno30@5b6864eb3f67:~/preprocessing/bqsr$ gatk BaseRecalibrator -I TCGA-BH-A1F0-01A_BRCA_dedup.bam -R ../hg38/hg38.fa --known-sites dbsnp_146.hg38.vcf --known-sites Mills_and_1000G_gold_standard.indels.hg38.vcf -O recal_TCGA-BH-A1F0-01A_BRCA.table 2> BaseRecalibrator_TCGA-BH-A1F0-01A_BRCA.log &   
 ```bash   
-aluno30@5b6864eb3f67:~/preprocessing/bqsr$ gatk BaseRecalibrator -I TCGA-BH-A1F0-11B_BRCA_dedup.bam -R hg38/hg38.fa --known-sites ../references/dbsnp_146.hg38.vcf --known-sites ../references/Mills_and_1000G_gold_standard.indels.hg38.vcf -O recal_TCGA-BH-A1F0-11B_BRCA.table  2> BaseRecalibrator_TCGA-BH-A1F0-11B_BRCA.log &   
+aluno30@5b6864eb3f67:~/preprocessing/bqsr$ gatk BaseRecalibrator -I TCGA-BH-A1F0-11B_BRCA_dedup.bam -R ../hg38/hg38.fa --known-sites dbsnp_146.hg38.vcf --known-sites Mills_and_1000G_gold_standard.indels.hg38.vcf -O recal_TCGA-BH-A1F0-11B_BRCA.table  2> BaseRecalibrator_TCGA-BH-A1F0-11B_BRCA.log &   
  ```
 Observe os comandos ```2> XXX.log```. Qual é a sua utilidade?   
 
