@@ -99,7 +99,7 @@ CAGGCACAGCCAAGAGGGCTGAAGAAATGGTAGAACGGAGCAGCTGGTGATGTGTGGGCCCACCGGCCCCAGGCTCCTGT
 
 ### PASSO 5: MAPEAMENTO
 
-![Map_reads](
+![Map_reads](https://github.com/cmasotti/BioinfoInstrumental-Aula04/blob/master/bestPractices_preprocessing_Map.jpg)  
 
 Para o correto maepamento, é preciso atribuir corretamente os nomes dos reads, ou "read groups".
 >__Por que atribuir corretamente os read groups (RG)?__  
@@ -142,7 +142,7 @@ Confira o cabeçalho dos .bam com a linha de comando:
 ```
 
 ### PASSO 6: ANÁLISE DA QUALIDADE DO MAPEAMENTO  
-Para avaliar a qualidade do mapeamento dos reads, executamos um script (em liguagem Java) do pacote de ferramentas Picard, o [CollectAlignmentSummaryMetrics](https://software.broadinstitute.org/gatk/documentation/tooldocs/current/picard_analysis_CollectAlignmentSummaryMetrics.php)
+Para avaliar a qualidade do mapeamento dos reads, executamos um script (em liguagem Java) do pacote de ferramentas Picard, o CollectAlignmentSummaryMetrics.
 
 Para tanto, vá ao diretório /alignment_metrics e crie links simbólicos para os .bams mapeados, ordenados e indexados.
 ```bash   
@@ -163,7 +163,77 @@ aluno30@5b6864eb3f67:~/preprocessing/alignment_metrics$ java -Xmx8G -jar /usr/lo
 
 O resultado será salvo nos arquivos de métricas de alinhamento. 
 Explore com o comando ```less -S metrics_TCGA-BH-A1F0-11B_BRCA.txt```  
+Observe o significado dos escores com base no link [CollectAlignmentSummaryMetrics](https://software.broadinstitute.org/gatk/documentation/tooldocs/current/picard_analysis_CollectAlignmentSummaryMetrics.php)
+
 
 ### PASSO 7: MARCAÇÃO DE READS DUPLICADOS
+![mark_duplicates](https://github.com/cmasotti/BioinfoInstrumental-Aula04/blob/master/bestPractices_preprocessing_dedup.jpg) 
+
+Nesta etapa, marcamos os reads duplicados com a ferramenta MarkDuplicates (Picard), que localiza e identifica reads duplicadas em um arquivo BAM ou SAM.   
+ > Reads duplicados se originam de um único fragmento de DNA.   
+ > Podem surgir duplicatas durante a construção da biblioteca usando PCR, por exemplo.
+ > Leituras duplicadas também podem resultar de um único cluster de amplificação, detectado incorretamente como múltiplos clusters pelo sensor óptico do instrumento de seqüenciamento. Esses artefatos de duplicação são referidos como duplicados ópticos.   
+ > Apenas marcaremos os reads duplicadas (a remoção é opcional).  
+ 
+Execute as linhas de comando abaixo para marcar os reads duplicados: 
+```bash  
+aluno30@5b6864eb3f67:~/preprocessing/markduplicates$ mkdir tmp_dir #repositório de arquivos temporários
+aluno30@5b6864eb3f67:~/preprocessing/markduplicates$ ln -s ../mapping/TCGA-BH-A1F0-*_BRCA_sorted.bam* . #link simbólico para .bams alinhados, ordenados e indexados
+aluno30@5b6864eb3f67:~/preprocessing/markduplicates$ ls #confira os arquivos salvos
+aluno30@5b6864eb3f67:~/preprocessing/markduplicates$ java -Xmx8G -jar /usr/local/bin/picard.jar MarkDuplicates INPUT=TCGA-BH-A1F0-01A_BRCA_sorted.bam OUTPUT=TCGA-BH-A1F0-01A_BRCA_dedup.bam METRICS_FILE=TCGA-BH-A1F0-01A_BRCA_dup.metrics OPTICAL_DUPLICATE_PIXEL_DISTANCE=2500 CREATE_INDEX=true TMP_DIR=tmp_dir 2> dedup_TCGA-BH-A1F0-01A_BRCA.log &
+```  
+
+```bash   
+aluno30@5b6864eb3f67:~/preprocessing/markduplicates$ java -Xmx8G -jar /usr/local/bin/picard.jar MarkDuplicates INPUT=TCGA-BH-A1F0-11B_BRCA_sorted.bam OUTPUT=TCGA-BH-A1F0-11B_BRCA_dedup.bam METRICS_FILE=TCGA-BH-A1F0-11B_BRCA_dup.metrics OPTICAL_DUPLICATE_PIXEL_DISTANCE=2500 CREATE_INDEX=true TMP_DIR=tmp_dir 2> dedup_TCGA-BH-A1F0-11B_BRCA.log &
+```  
+
+O script também gera um arquivo de métricas, confira em [MarDuplicates](https://software.broadinstitute.org/gatk/documentation/tooldocs/4.0.4.0/picard_sam_markduplicates_MarkDuplicates.php).  
+Explore com ```less -S TCGA-BH-A1F0-01A_BRCA_dup.metrics``` a proporção de reads duplicados, por exemplo.
+
+### PASSO 8: BQSR (Base Quality Score Recalibration)
+![BQSR](https://github.com/cmasotti/BioinfoInstrumental-Aula04/blob/master/bestPractices_preprocessing_BQSR.jpg)
+
+>Este passo detecta os erros sistemáticos cometidos pelo seqüenciador quando estima o escore de qualidade de cada base detectada.
+>O **BQSR** aplica o aprendizado de máquina para modelar empiricamente esses erros e ajustar os escores de qualidade.
+
+#### PASSO 8.1: BASE RECALIBRATOR (NÃO É TABAJARA!)  
+
+>Gera tabela para recalibração para BQSR pelo script GATK [BaseRecalibrator](https://software.broadinstitute.org/gatk/documentation/tooldocs/current/org_broadinstitute_hellbender_tools_walkers_bqsr_BaseRecalibrator.php)  
+
+>Identifica SNVs e INDELs polimórficos para ajustar escores, apoiado nos databases:  
+ >-SNVs do [dbSNP](https://www.ncbi.nlm.nih.gov/snp/) **dbsnp_146.hg38.vcf**  
+ >-Conjunto de indels conhecidas e validadas **Mills_and_1000G_gold_standard.indels.b37.sites.vcf**  
+ 
+Vá ao diretório **/bqsr** e crie links simbólicos para esses datasets de referência e para os arquivos .bam com reads duplicados marcados de /markduplicates:  
+```bash   
+aluno30@5b6864eb3f67:~/preprocessing/bqsr$ ln -s /mnt/dados/aula4/references/Mills_and_1000G_gold_standard.indels.hg38.vcf* .  
+aluno30@5b6864eb3f67:~/preprocessing/bqsr$ ln -s /mnt/dados/aula4/references/dbsnp_146.hg38.vcf* .  
+aluno30@5b6864eb3f67:~/preprocessing/bqsr$ ln -s ../markduplicates/TCGA-BH-A1F0-*dedup.bam . 
+aluno30@5b6864eb3f67:~/preprocessing/bqsr$ ln -s ../markduplicates/TCGA-BH-A1F0-*dedup.bam .   
+aluno30@5b6864eb3f67:~/preprocessing/bqsr$ ls # confira os arquivos salvos
+```  
+Execute a linha de comando a seguir para as duas amostras TCGA:
+```bash   
+aluno30@5b6864eb3f67:~/preprocessing/bqsr$ gatk BaseRecalibrator -I TCGA-BH-A1F0-01A_BRCA_dedup.bam -R ../hg38/hg38.fa --known-sites dbsnp_146.hg38.vcf --known-sites Mills_and_1000G_gold_standard.indels.hg38.vcf -O recal_TCGA-BH-A1F0-01A_BRCA.table 2> BaseRecalibrator_TCGA-BH-A1F0-01A_BRCA.log &   
+```bash   
+aluno30@5b6864eb3f67:~/preprocessing/bqsr$ gatk BaseRecalibrator -I TCGA-BH-A1F0-11B_BRCA_dedup.bam -R hg38/hg38.fa --known-sites ../references/dbsnp_146.hg38.vcf --known-sites ../references/Mills_and_1000G_gold_standard.indels.hg38.vcf -O recal_TCGA-BH-A1F0-11B_BRCA.table  2> BaseRecalibrator_TCGA-BH-A1F0-11B_BRCA.log &   
+ ```
+Observe os comandos ```2> XXX.log```. Qual é a sua utilidade?   
+
+#### PASSO 8.2: APLICAR BQSR   
+Nesta etapa, recalibramos os novos escores com o script [GATK-ApplyBQSR](https://software.broadinstitute.org/gatk/documentation/tooldocs/current/org_broadinstitute_hellbender_tools_walkers_bqsr_ApplyBQSR.php)  
+> As variantes conhecidas são usadas para mascarar bases em locais de variação polimórfica real (esperada).  
+
+Execute a linha de comando para as duas amostras TCGA, usando as tabelas geradas pelo **BaseRecalibrator** (recal_TCGA-BH-A1F0-XX_BRCA.table:  
+
+```bash   
+aluno30@5b6864eb3f67:~/preprocessing/bqsr$ gatk ApplyBQSR -I TCGA-BH-A1F0-01A_BRCA_dedup.bam -R ../hg38/hg38.fa --bqsr-recal-file recal_TCGA-BH-A1F0-01A_BRCA.table -O TCGA-BH-A1F0-01A_BRCA_bqsr.bam 2> ApplyBQSR_TCGA-BH-A1F0-01A_BRCA.log &
+aluno30@5b6864eb3f67:~/preprocessing/bqsr$  
+aluno30@5b6864eb3f67:~/preprocessing/bqsr$ gatk ApplyBQSR -I TCGA-BH-A1F0-11B_BRCA_dedup.bam -R ../hg38/hg38.fa --bqsr-recal-file recal_TCGA-BH-A1F0-11B_BRCA.table -O TCGA-BH-A1F0-11B_BRCA_bqsr.bam 2> ApplyBQSR_TCGA-BH-A1F0-11B_BRCA.log &  
+```
+
+Após a conclusão dessa etapa, temos os arquivos prontos para iniciar a chamada de variantes propriamente dita.
+
+
 
 
