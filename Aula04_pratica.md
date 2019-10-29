@@ -50,7 +50,8 @@ Preparando o **genoma de referência (hg38)**:
  - Genoma de referência é um arquivo muito grande - trabalharemos com o genoma já pronto para a análise. 
  - Peculiaridades do hg38 em relação ao hg19 [HumanGenomeReferenceBuilds](https://gatkforums.broadinstitute.org/gatk/discussion/11010/human-genome-reference-builds-grch38-hg38-b37-hg19)
  - hg38.fa pode ser baixado a partir do repositório [GATK-Bundle]([ftp://gsapubftp-anonymous@ftp.broadinstitute.org/bundle/](ftp://gsapubftp-anonymous@ftp.broadinstitute.org/bundle/). 
-  - Uma vez disponível, é preciso indexar o hg38.fa de acordo com as exigências do mapper/caller que utilizaremos (BWA-MEM/GATK, vide abaixo).
+  - Uma vez disponível, é preciso indexar o hg38.fa de acordo com as exigências do mapper/caller que utilizaremos. O BWA requer um conjunto diferente de arquivos de índice para alinhamento e o comando abaixo cria cinco dos seis arquivos necessários (.fai, .pac, .bwt, .ann, .amb, .sa).
+  
 ```bash   
 aluno30@5b6864eb3f67:~/preprocessing$ bwa index
 
@@ -64,6 +65,22 @@ Options: -a STR    BWT construction algorithm: bwtsw, is or rb2 [auto]
 Warning: `-a bwtsw' does not work for short genomes, while `-a is' and
          `-a div' do not work not for long genomes.
 ```  
+ - Confira os índices para análise:
+```bash   
+aluno30@5b6864eb3f67:~/preprocessing$ ls -ltr /mnt/dados/aula4/hg38/
+```  
+ >**hg38.25chrs.fa** (download GATK-budle)  
+ >hg38.fa.fai, hg38.fa.amb, hg38.fa.ann, hg38.fa.bwt, hg38.fa.pac, hg38.fa.sa   
+
+ - É preciso criar o arquivo hg38.dict,um dicionário das sequências de referência FASTA (Picard [CreateSequenceDicttionary](https://software.broadinstitute.org/gatk/documentation/tooldocs/4.0.3.0/picard_sam_CreateSequenceDictionary.php))  
+
+Faça um link simbólico para o genoma referência e seus índices na sua pasta "preprocessing":
+```bash   
+aluno30@5b6864eb3f67:~/preprocessing/hg38$ ln -s /mnt/dados/aula4/hg38/* .  
+```  
+
+
+
 
 
 
