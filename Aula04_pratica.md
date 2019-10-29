@@ -121,5 +121,20 @@ aluno30@5b6864eb3f67:~/preprocessing/mapping$ bwa mem -M -t4 -R '@RG\tID:74ed781
 aluno30@5b6864eb3f67:~/preprocessing/mapping$ bwa mem -M -t4 -R '@RG\tID:3ac135b5-f024-4534-a513-7adb9f04cc00\tSM:TCGA-BH-A1F0-11B\tPL:ILLUMINA\t' ../hg38/hg38.fa TCGA-BH-A1F0-11B_BRCA_R1.fastq TCGA-BH-A1F0-11B_BRCA_R2.fastq | samtools view -@4 -Sb - -O BAM -o TCGA-BH-A1F0-11B_BRCA.bam   
 ```   
 
+Observe o que a segunda parte da linha de comando faz. 
+Por que convertemos .sam para .bam?
 
+Para prosseguir, também precisamos ordenar:
+```bash   
+aluno30@5b6864eb3f67:~/preprocessing/mapping$ samtools sort -@4 TCGA-BH-A1F0-01A_BRCA.bam -O BAM -o TCGA-BH-A1F0-01A_BRCA_sorted.bam  
+aluno30@5b6864eb3f67:~/preprocessing/mapping$ samtools sort -@4 TCGA-BH-A1F0-11B_BRCA.bam -O BAM -o TCGA-BH-A1F0-11B_BRCA_sorted.bam  
+```  
+... e indexar nossos dados mapeados:
+```bash   
+aluno30@5b6864eb3f67:~/preprocessing/mapping$ samtools index -@2 TCGA-BH-A1F0-01A_BRCA_sorted.bam  
+aluno30@5b6864eb3f67:~/preprocessing/mapping$ samtools index -@2 TCGA-BH-A1F0-11B_BRCA_sorted.bam  
+```   
+
+### PASSO 6: ANÁLISE DA QUALIDADE DO MAPEAMENTO  
+Para avaliar a qualidade do mapeamento dos reads, executamos um script do pacote de ferramentas Picard
 
