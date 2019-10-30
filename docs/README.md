@@ -72,7 +72,7 @@ aluno30@5b6864eb3f67:~/preprocessing$ ls -ltr /mnt/dados/aula4/hg38/
  >**hg38.25chrs.fa** (download GATK-budle)  
  >hg38.fa.fai, hg38.fa.amb, hg38.fa.ann, hg38.fa.bwt, hg38.fa.pac, hg38.fa.sa   
 
- - É preciso criar o arquivo hg38.dict,um dicionário das sequências de referência FASTA (Picard [CreateSequenceDicttionary](https://software.broadinstitute.org/gatk/documentation/tooldocs/4.0.3.0/picard_sam_CreateSequenceDictionary.php))  
+ - É preciso criar o arquivo hg38.dict,um dicionário das sequências de referência FASTA (Picard [CreateSequenceDictionary](https://software.broadinstitute.org/gatk/documentation/tooldocs/4.0.3.0/picard_sam_CreateSequenceDictionary.php))  
 
 **Faça um link simbólico para o genoma referência e seus índices na sua pasta "preprocessing" e confira:**
 ```bash   
