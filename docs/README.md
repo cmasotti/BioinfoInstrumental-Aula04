@@ -137,9 +137,11 @@ aluno30@5b6864eb3f67:~/preprocessing/mapping$ samtools index -@2 TCGA-BH-A1F0-01
 aluno30@5b6864eb3f67:~/preprocessing/mapping$ samtools index -@2 TCGA-BH-A1F0-11B_BRCA_sorted.bam  
 ```   
 
-Confira o cabeçalho dos .bam com a linha de comando:
+Confira o cabeçalho dos arquivos .bam com a linha de comando:
 ```bash   
-```
+aluno30@5b6864eb3f67:~/preprocessing/mapping$ samtools view -H TCGA-BH-A1F0-01A_BRCA_sorted.bam 
+aluno30@5b6864eb3f67:~/preprocessing/mapping$ samtools view -H TCGA-BH-A1F0-11B_BRCA_sorted.bam 
+```  
 
 ### PASSO 6: ANÁLISE DA QUALIDADE DO MAPEAMENTO  
 Para avaliar a qualidade do mapeamento dos reads, executamos um script (em liguagem Java) do pacote de ferramentas Picard, o CollectAlignmentSummaryMetrics.
@@ -209,7 +211,7 @@ Vá ao diretório **/bqsr** e crie links simbólicos para esses datasets de refe
 aluno30@5b6864eb3f67:~/preprocessing/bqsr$ ln -s /mnt/dados/aula4/references/Mills_and_1000G_gold_standard.indels.hg38.vcf* .  
 aluno30@5b6864eb3f67:~/preprocessing/bqsr$ ln -s /mnt/dados/aula4/references/dbsnp_146.hg38.vcf* .  
 aluno30@5b6864eb3f67:~/preprocessing/bqsr$ ln -s ../markduplicates/TCGA-BH-A1F0-*dedup.bam . 
-aluno30@5b6864eb3f67:~/preprocessing/bqsr$ ln -s ../markduplicates/TCGA-BH-A1F0-*dedup.bam .   
+aluno30@5b6864eb3f67:~/preprocessing/bqsr$ ln -s ../markduplicates/TCGA-BH-A1F0-*dedup.bai .   
 aluno30@5b6864eb3f67:~/preprocessing/bqsr$ ls # confira os arquivos salvos
 ```  
 Execute a linha de comando a seguir para as duas amostras TCGA:
